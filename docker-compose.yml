@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  db:
+    image: mongo
+    volumes:
+      - dbdata:/data/db
+    ports:
+      - "27017:27017"
+
+  api:
+    build: ./parts_warehouse
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./parts_warehouse:/api
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=parts_warehouse.settings
+    depends_on:
+      - db
+
+volumes:
+  dbdata:
+    name: partswarehouse_dbdata
